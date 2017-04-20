@@ -8,6 +8,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
+import android.graphics.drawable.shapes.Shape;
 import android.support.annotation.Nullable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
@@ -16,6 +20,12 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import static android.R.attr.path;
+import static android.os.Build.VERSION_CODES.M;
+import static android.view.View.MeasureSpec.AT_MOST;
+import static android.view.View.MeasureSpec.EXACTLY;
+import static android.view.View.MeasureSpec.getMode;
 
 /**
  * Created by Administrator on 2017/4/20.
@@ -42,6 +52,9 @@ public class FreqGainCurveView extends View{
     private float mXPegHeight;
     private float mYPegWidthLong;
     private float mYPegWidthShort;
+
+    private float mMinWidth;
+    private float mMinHeight;
 
     private TextPaint mTextPaint;
     private Paint mPaint;
@@ -81,6 +94,12 @@ public class FreqGainCurveView extends View{
         mXPegHeight = ta.getDimension(R.styleable.FreqGainCurveView_fgc_x_peg_height, dp2px(4));
         mYPegWidthLong = ta.getDimension(R.styleable.FreqGainCurveView_fgc_y_peg_width_long, dp2px(4));
         mYPegWidthShort = ta.getDimension(R.styleable.FreqGainCurveView_fgc_y_peg_width_short, dp2px(2));
+        mYPegWidthShort = mYPegWidthLong > mYPegWidthShort ? mYPegWidthShort : mYPegWidthLong;
+
+        mMinWidth = mBorderSize * 2 + mPadding * 2 + mTextSize * 3
+                + mBgCornerRadius + mYTextPaddingEnd + mYPegWidthLong + mXEndLength;
+        mMinHeight = mBorderSize * 2 + mPadding * 2 + mTextSize
+                + mBgCornerRadius + mXTextPaddingTop + mXPegHeight + mYEndLength;
 
         mTextPaint = new TextPaint();
         mTextPaint.setAntiAlias(true);
@@ -94,6 +113,7 @@ public class FreqGainCurveView extends View{
 
     public void setFreqGainEntries(List<FreqGainEntry> points) {
         mFeqGainEntries = points;
+
         invalidate();
     }
 
@@ -103,18 +123,46 @@ public class FreqGainCurveView extends View{
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+
+        int width = widthSize;
+        int height = heightSize;
+
+        if (widthMode == AT_MOST){
+            width = (int) mMinWidth;
+        }
+        if (heightMode == AT_MOST){
+            height = (int) mMinHeight;
+        }
+
+        setMeasuredDimension(width, height);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        //处理尺寸冲突
-
-
+        final int width = getMeasuredWidth();
+        final int height = getMeasuredHeight();
 
         //画边框
+        mPaint.setColor(mBorderColor);
+        mPaint.setStyle(Paint.Style.FILL);
+        float border = mBorderSize + mBgCornerRadius / 2;
+        canvas.drawRect(0, 0, width, border, mPaint);
+        canvas.drawRect(0, border, border, height - border, mPaint);
+        canvas.drawRect(width - border, border, width, height - border, mPaint);
+        canvas.drawRect(0, height - border, width, height, mPaint);
 
         //画背景
+        mPaint.setColor(mBgColor);
+        GradientDrawable bg = new GradientDrawable();
+        bg.setColor(mBgColor);
+        bg.setShape(GradientDrawable.RECTANGLE);
+        bg.setCornerRadius(mBgCornerRadius);
+        bg.setBounds((int)mBorderSize, (int)mBorderSize, (int)(width - mBorderSize), (int)(height - mBorderSize));
+        bg.draw(canvas);
 
         //画竖线和横轴刻度
 
@@ -167,7 +215,7 @@ public class FreqGainCurveView extends View{
 
         mPath.lineTo(points.get(0).x, centerY);
         mPath.lineTo(points.get(0).x, points.get(0).y);
-
+        mPaint.setColor(mCurveFillColor);
         canvas.drawPath(mPath, mPaint);
     }
 
