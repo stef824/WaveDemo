@@ -157,12 +157,12 @@ public class FreqGainCurveView extends View{
 
         //画背景
         mPaint.setColor(mBgColor);
-        GradientDrawable bg = new GradientDrawable();
-        bg.setColor(mBgColor);
-        bg.setShape(GradientDrawable.RECTANGLE);
-        bg.setCornerRadius(mBgCornerRadius);
-        bg.setBounds((int)mBorderSize, (int)mBorderSize, (int)(width - mBorderSize), (int)(height - mBorderSize));
-        bg.draw(canvas);
+        GradientDrawable background = new GradientDrawable();
+        background.setColor(mBgColor);
+        background.setShape(GradientDrawable.RECTANGLE);
+        background.setCornerRadius(mBgCornerRadius);
+        background.setBounds((int)mBorderSize, (int)mBorderSize, (int)(width - mBorderSize), (int)(height - mBorderSize));
+        background.draw(canvas);
 
         //画竖线和横轴刻度
 
@@ -171,7 +171,6 @@ public class FreqGainCurveView extends View{
         //画纵轴文字
 
         //画横轴文字
-
 
         //画曲线
         if (mFeqGainEntries == null || mFeqGainEntries.isEmpty()) return;
