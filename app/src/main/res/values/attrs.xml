@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FreqGainCurveView">
+        <attr name="fgc_border_color" format="color"/>
+        <attr name="fgc_border_size" format="dimension"/>
+        <attr name="fgc_bg_color" format="color"/>
+        <attr name="fgc_bg_corner_radius" format="dimension"/>
+        <attr name="fgc_coordinate_padding" format="dimension"/>
+        <attr name="fgc_coordinate_x_end_length" format="dimension"/>
+        <attr name="fgc_coordinate_y_end_length" format="dimension"/>
+        <attr name="fgc_coordinate_horizontal_dash_gap" format="dimension"/>
+        <attr name="fgc_coordinate_vertical_dash_gap" format="dimension"/>
+        <attr name="fgc_text_color" format="color"/>
+        <attr name="fgc_text_size" format="dimension"/>
+        <attr name="fgc_line_color" format="color"/>
+        <attr name="fgc_curve_fill_color" format="color"/>
+        <attr name="fgc_x_text_padding_top" format="dimension"/>
+        <attr name="fgc_y_text_padding_end" format="dimension"/>
+        <attr name="fgc_x_peg_height" format="dimension"/>
+        <attr name="fgc_y_peg_width_long" format="dimension"/>
+        <attr name="fgc_y_peg_width_short" format="dimension"/>
+    </declare-styleable>
+</resources>
